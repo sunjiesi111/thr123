@@ -1,0 +1,28 @@
+.message{color: #f00;padding-left:20px;}
+.msg_messages{color: #f00;padding-left:100px;}
+.msg_getpwd{color: #f00;padding-left:353px;}
+.msg_phone{color: #f00;padding-left:110px;}
+.msg_pwd{color: #f00;padding-left:355px;}
+
+.msg_code{color: #f00;padding-left:110px;}
+
+.msg_pwdset{color: #f00;padding-left:355px;}
+
+.buttion01{
+    background: #b76c32 none repeat scroll 0 0;
+    border: 0px;
+    border-radius: 3px;
+    color: #fff;
+    font-size:12px;
+    height: 25px;
+    line-height:25px;
+    text-align: center;
+    max-width:120px;
+}
+
+.reg_p {
+   max-height:20px;
+    line-height: 18px;
+    padding-top:2px;
+
+}

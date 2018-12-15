@@ -1,0 +1,9 @@
+﻿/*
+ * 获取随机验证码
+ * */
+function changeVerifyCode(){
+    $("#verifyCode").attr("src","/captcha/user.html?="+Math.random());
+}
+
+
+

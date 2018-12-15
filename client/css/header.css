@@ -1,0 +1,343 @@
+div,ul,li,p,input{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+ul{
+    list-style:none;
+}
+a{
+    text-decoration:none;
+}
+div.container{
+   width:1200px; 
+   font-size:13px;
+   margin:0 auto;
+   color:#666;
+   position:absolute;
+}
+div.header_top{
+    width:100%;
+    border:1px solid #ddd;
+    background:#f2f2f2;
+    padding:0 100px;
+}
+div.header_top:after{
+    content:"";
+    display:block;
+    clear:both;
+}
+ul.header_top_left{
+    float:left;
+}
+ul.header_top_right{
+    float:right;  
+}
+div.header_top li{
+    float:left;
+    padding:6px;
+    color:#666;  
+}
+ul.header_top_right a{
+    color:#666;  vertical-align:middle;
+}
+ul.header_right_img{
+    width:350px;
+    height:150px;
+    position: absolute;
+    z-index:2;
+    top:33px;
+    right:75px;
+    background:#fff;
+    border:1px solid #eee;
+    display:none;
+}
+.header_right_img li{
+    float:left;
+    width:100px;
+    height:80px;
+    margin-left:8px;
+} 
+.header_right_img li p{
+    text-align:center;
+    width:100%;
+}
+.header_right_img li img{
+    width:100px;
+    height:88px;  
+   
+}
+div.header_middle{
+    width:100%;
+}
+div.header_middle img{
+    margin:0 auto;
+    display:block;
+}
+div.header_middle_top{
+    display:block;
+    margin:0 auto;
+    position:relative;;
+    right:0;opacity:1;
+}
+div.header_middle_top .middle_top_1{
+	position: absolute;
+	left:1045px;
+	bottom:130px;
+    background:#fff;	
+    display:none;
+}
+div.header_middle_top:hover .middle_top_1{
+    display:block;
+}
+div.header_middle_bottom{
+    width:1000px;
+    height:150px;
+    margin:0 auto;
+}
+div.header_mb_left{
+    float:left;
+    padding:35px 0 30px 0;
+}
+div.header_mb_left a img{
+    width:218px;
+    height:47px;
+}
+div.header_mb_left p{
+   line-height:30px; padding:2px 30px 5px 30px;
+}
+div.header_mb_center{
+    float:left;
+    width:50%;
+    margin-top:50px;
+}
+div.header_mbc_top{
+    border: 1px solid #dd801a;
+    height: 40px;
+    width: 400px;
+    margin: 0 auto;
+    position: relative;
+    
+}
+div.header_mbc_top span{
+    width: 58px;
+    height: 35px;
+    text-align: center;
+    line-height: 40px;
+    color: #dd801a;
+    font-size:16px;
+    padding:10px;
+ 
+} 
+ul.checkbox{
+    position:absolute;
+    width:50px;
+    height:0;
+    top:40px;
+    opacity: 0;
+    transition: all .5s linear;
+   
+}
+.checkbox li{
+    width:50px;
+    background:#fff;
+    text-align: center;      
+}
+.checkbox li:hover{
+    background:#ddd;
+    color:#dd801a ;   
+}
+div.header_mbc_top .search_1{
+    width: 195px;
+    height: 30px;
+    border: none;
+    margin-left: 38px;
+    outline: none;
+    font-size:14px;
+}
+div.header_mbc_top .search_2{
+    background: #dd801a;
+    border: none;
+    height: 38px;
+    color: #fff;
+    outline: none;
+    width: 76px;
+    font-size: 17px;
+    margin-left:28px;
+}
+div.header_mbc_bottom{
+    margin-left: 46px;
+}
+div.header_mbc_bottom li{
+    float: left;
+    margin:10px;
+}
+div.header_mbc_bottom li a{
+    color: #666;
+}
+
+
+div.header_mb_right{
+    float:left;
+}
+div.header_mb_right img{
+    width:68px;
+    float:left;
+    margin-top:30px;
+    padding:10px; 
+}
+div.header_bottom{
+    width:100%;
+    background:#84190b;
+    font-size:16px;
+}
+div.header_bottom ul.nav{
+    margin-left:100px;
+    height:43px;
+    width: 1000px;
+    padding:0;   
+}
+
+ul li.current{
+    height:43px;
+    width:83px;
+    background: #dd801a;
+
+}
+div.header_bottom li{
+    float: left;
+    margin-left: 30px;
+    line-height: 37px;
+    margin: -3px 20px;
+    text-align: center;
+}
+div.header_bottom li a{
+    display: block;
+    color: #fff;
+}
+div.body_leftside{
+    width:110px;
+    margin:0;
+    padding:0;
+    background: #fffdfa;
+    border: 1px solid #ccb295;
+    position:fixed;
+    bottom:0;
+    left:10px;;
+    z-index: 10;
+}
+div.leftside_top{
+    width:100px;
+    padding:0;
+    margin:0;
+    font-size:16px;
+    text-align:center;
+    line-height:36px;
+    color: #9e8a73;
+    border-bottom:1px dashed #bbab99;
+}
+div.leftside_middle{
+    margin:0;
+    padding:0;
+    text-align:center;
+}
+div.leftside_middle li{
+    width:100px;
+    margin:0;
+    padding:0;
+
+}
+ul.leftside_middle li p{
+    margin-left:15px;
+    
+}
+ul.leftside_middle li img{
+    width:73px;
+    margin-left:13px;
+   
+}
+div.leftside_bottom{
+    width:100%;
+    line-height:26px;
+    background:#ccb295;
+    text-align:center;
+    color:#fff;
+    
+}
+div.body_rightside{
+    width:35px;
+    background:#454545;
+	overflow:hidden;
+    height:100%;
+    position: fixed;
+    right:0;
+    top:0;  
+}
+div.body_rightside ul{
+    margin-top:110px;
+}
+div.body_rightside ul li:hover{
+    background:#dd801a;
+}
+div.body_rightside ul li{
+    cursor: pointer;
+    position:relative;
+    margin:15px auto;
+}
+div.body_rightside ul li p{
+    position:absolute;
+    top:0;
+    right:35px;
+    line-height:30px;
+    height:30px;
+    overflow:hidden;
+    width:0;
+    text-align: center;
+    background:#dd801a;
+    color:#fff;
+    transition:all 0.5s linear
+}
+div.body_rightside ul li i{
+    width:30px;height:30px;
+    display:block;
+    margin:auto;
+}
+div.body_rightside ul li:first-child i{
+    background:url(../img/header/sidebaricon.png) no-repeat;
+    background-position:-3px 0;
+}
+div.body_rightside ul li:first-child:hover p{width:200px}
+    div.body_rightside ul li:nth-child(2){
+        border-top:1px solid #666;
+        border-bottom:1px solid #666;
+    }
+    div.body_rightside ul li:nth-child(2) span{
+        color:#fff;
+        padding:10px;
+        text-align:center;
+        margin:auto;
+        display:block;
+    }
+    div.body_rightside ul li:nth-child(2) i{
+        background:url(../img/header/sidebaricon.png) no-repeat;background-position:-1px -210px;
+    }
+    div.body_rightside ul li:nth-child(2):hover i{background-position:-32px -210px;}
+    div.body_rightside ul li:nth-child(3) div{
+        position:absolute;right:35px;top:-43px;overflow: hidden;width:0;transition: all 0.5s linear
+    }
+    div.body_rightside ul li:nth-child(3):hover div{width:196px;}
+    div.body_rightside ul li:nth-child(3) i{
+        background:url(../img/header/sidebaricon.png) no-repeat;background-position:5px -296px;
+    }
+    div.body_rightside ul li:last-child i{background:url(../img/header/sidebaricon.png) no-repeat;background-position:-3px -184px;}
+    div.body_rightside ul li:last-child:hover p{width:100px}
+
+
+
+
+
+
+
+
+
+

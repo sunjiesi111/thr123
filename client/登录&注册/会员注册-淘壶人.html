@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0043)http://user.taohuren.com/user/register.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>会员注册-淘壶人</title>
+    <meta name="keywords" content="淘壶人,陶壶,紫砂壶">
+    <meta name="description" content="淘壶人注册登录页">
+    <meta name="Robots" contect="noindex,nofollow,noarchive">
+    <script type="text/javascript" src="./会员注册-淘壶人_files/jquery-1.9.1.min.js.下载"></script>
+    <link rel="stylesheet" href="./会员注册-淘壶人_files/style.css" type="text/css">
+    <link rel="stylesheet" href="./会员注册-淘壶人_files/user_login.css" type="text/css">
+    <script type="text/javascript" src="./会员注册-淘壶人_files/my_user3.js.下载"></script>
+    <!--<script type="text/javascript" src="/static/user/my_user3.js"></script>-->
+    <script type="text/javascript" src="./会员注册-淘壶人_files/common.js.下载"></script>
+    <!--<script type="text/javascript" src="/static/default/js/01/user.js?s=5"></script>-->
+<style>#thr_online{width:44px;height:142px;overflow:hidden;position:fixed;bottom:20px;right:20px;}
+#thr_service{width:44px;height:44px;overflow:hidden;margin:0;padding:0;display:block;cursor:pointer;background:url(//statics.taohuren.com/public/online/box.gif) no-repeat;}
+#thr_qrcode{width:44px;height:44px;overflow:hidden;margin:5px 0 0 0;padding:0;display:block;cursor:pointer;background:url(//statics.taohuren.com/public/online/box.gif) no-repeat 0 -49px;}
+#thr_gotop{width:44px;height:44px;overflow:hidden;margin:5px 0 0 0;padding:0;cursor:pointer;background:url(//statics.taohuren.com/public/online/box.gif) no-repeat 0 -98px;}
+#thr_qrimgage{width:196px;height:113px;overflow:hidden;margin:0;padding:0;position:fixed;bottom:35px;right:65px;}
+#service_box {width:125px;z-index:50;position:fixed;bottom:20px;right:70px;height:auto;font-size:12px;font-family:microsoft yahei;}
+#service_box h3 {list-style:none;margin:0;padding:0}
+#service_box .item {width:100%;background:#fff;border-top:1px dotted #aaa;position:relative;z-index:97;margin-top:-1px}
+#service_box .duty {background:#ffc;}
+#service_box .item h3 {height:25px;line-height:25px;text-align:center;font-size:13px;font-weight:normal;text-indent:10px}
+#service_box .item a {color:#663300;text-decoration:none;float:left;}
+#service_box .item a:hover {color:#E4393C;}
+#service_box .item_box {display:none;zoom:1;}
+#service_box .item_box:before, #service_box .item_box:after {content:".";display:block;height:0;line-height:0;font-size:0;clear:both;visibility:hidden}
+#service_box .item_hover .item_box {display:block}
+#service_box .item_box p {margin:0 0 5px 8px;text-align:center;clear:both;float:left}
+#service_box .item_list_duty {background:#FFFFCC}
+#service_box .item .item_list p.call {padding-right:10px;background:url(//statics.taohuren.com/public/online/tel_bg.gif) no-repeat;text-align:left;text-indent:25px;height:25px;line-height:25px;}
+#service_box .item_h {width:123px;height:auto;background:#fff;overflow:hidden;z-index:99;position:relative}
+#service_box .item_h h3 {height:25px;background:#db6506;line-height:25px;font-size:14px;text-align:center;color:#fff;}
+#service_box .item_h span {cursor:pointer;background:#FF7700;padding:0 8px;float:right}
+#service_box .item_h p {margin-top:10px}
+#service_box .item_h p.call {background:url(//statics.taohuren.com/public/online/tel_bg.gif) no-repeat;text-align:left;line-height:14px;}
+#service_box .item_h .totop {height:20px;line-height:20px;background:#f70;text-align:center;border-top:1px solid #aa3300;overflow:hidden;margin:0;padding:0}
+#service_box .item_h .totop a {color:#fff;display:block;text-decoration:none;}
+#service_box .item_h .totop a:hover {color:#ffc;text-decoration:underline;}
+#service_box ul {border:1px solid #db6506;display:block;width:123px}
+#service_box ul,#service_box li{list-style: none;margin:0;padding:0}</style></head>
+<body>
+<div id="top_bg">
+    <div id="top">
+        <div class="logo"><a href="http://www.taohuren.com/" target="_blank"><img alt="淘壶人LOGO" src="./会员注册-淘壶人_files/logo.jpg"></a></div>
+        <div class="login_p"><p>| 注册</p></div>
+        <div class="nav">
+            <p>
+                <a href="http://www.taohuren.com/" target="_blank">门户首页</a> |
+                <a href="http://www.taohuren.com/zishahu/" target="_blank">紫砂商城</a> |
+                <a href="http://doc.taohuren.com/cate-2013-1.html" target="_blank">联系客服</a>
+            </p>
+        </div>
+    </div>
+</div>
+<div id="reg_bg">
+  <div class="reg_left">
+  <br>
+   <p class="reg_input_tips">欢迎来到淘壶人，如果您是新用户，请填写下面的表单进行注册！或与我们的客服联系协助您注册！</p><br>
+   <p class="reg_input_p"><span>*</span>&nbsp;用户名:&nbsp;<input class="reg_inputs" type="text" name="username" id="username" onblur="user.get_register_username();"></p>
+    <p class="reg_p"><span id="msg_username" class="msg_messages">请输入用户名!</span></p>
+   <p class="reg_input_p"><span>*</span>&nbsp;密码:&nbsp;<input class="reg_inputs" type="password" name="password" id="password" onblur=""></p>
+      <p class="reg_p"><span id="msg_password" class="msg_messages"></span></p>
+   <p class="reg_input_p"><span>*</span>&nbsp;确认密码:&nbsp;<input class="reg_inputs" type="password" name="passwordok" id="passwordok" onblur=""></p>
+   <p class="reg_p"><span id="msg_passwordok" class="msg_messages"></span></p>
+   <p class="reg_input_p">
+       <span>*</span>&nbsp;手机号码:&nbsp;<input class="reg_inputs" type="text" name="telephone" id="telephone" onblur="user.get_register_phone();">
+   </p>
+   <p class="reg_p"><span id="msg_telephone" class="msg_messages"></span></p>
+   <p class="reg_input_a">请输入准确的手机号，才能通过审核！通过手机可以找回密码！接收优惠信息等！</p>
+   <p class="reg_input_v"><span style="color:#F00">*</span>&nbsp;验证码:&nbsp;<input class="reg_inputs2" type="text" name="code" id="code">
+       <input name="1" id="zPhone" type="button" value="获取手机验证码" onclick="send_msg2();" class="c-btn11">
+   </p>
+   <p class="reg_p"><span id="msg_code" class="msg_messages"></span></p>
+     <p class="reg_input_a">
+   <input type="checkbox" name="agreement" id="agreement" value="1" checked="checked">
+    我已阅读并同意<a href="http://doc.taohuren.com/cate-2010-1.html" style="color:#005AA0" target="_blank">《会员注册协议》</a>
+    </p><p class="reg_p"><span id="msg_register" class="msg_messages"></span></p>
+   <p>
+   <button type="button" class="reg_submit" onclick="user.userRegister()">
+       <img src="./会员注册-淘壶人_files/reg_submit.png">
+   </button>
+   </p><br>
+ </div>
+ <div class="reg_right">
+     <p class="a_reg">我已经注册</p>
+     <div class="gologin">
+     <a href="http://user.taohuren.com/user/login.html"><img src="./会员注册-淘壶人_files/gologin.png"></a>
+     </div>
+   </div>
+</div>
+<style type="text/css">
+    .c-btn11 {
+        cursor: pointer;
+        float: right;
+        margin-right: 40px;;
+        border-radius: 4px;
+        color: #a1510e;
+        border: 0;
+        height: 2.1rem;
+        line-height: 1.8rem;
+        width:100px;
+        -webkit-box-flex: 1;
+        display: block;
+        -webkit-user-select: none;
+        font-size: 0.8rem;
+        text-align: center;
+        background: #fff;
+        border: 1px solid #a1510e;
+    }
+</style>
+<script type="text/javascript">
+
+   function send_msg2() {//发送手机验证码
+        var user_name = $('#uname').val();
+        var mobile = $('#telephone').val();
+        var flag = $('#flag').val();
+        $.post("/user/ajaxSendPhone2/", {"mobile_phone":mobile,"user_name":user_name, "flag":flag}, function (result) {
+            if (result.success) {
+                user.RemainTime();
+                $("#msg_code").html(result.message);
+            } else {
+                $("#msg_code").html(result.message);
+            }
+        }, "json");
+    }
+    $(function(){
+        var curIntervalId = setInterval(function () {
+            $("#username").focus();
+            clearInterval(curIntervalId);
+        } , 100);
+    });
+    //设置Enter键事件
+    $(document).keyup(function(event){
+        if(event.keyCode==13){
+            user.userRegister();
+        }
+    });
+
+</script>
+<div id="foot_bg">
+    <div class="foot_a">
+        <div class="foot_p">
+            <p>
+                  <a href="http://doc.taohuren.com/cate-2012-1.html" target="_blank">购壶流程</a>
+                | <a href="http://doc.taohuren.com/cate-2018-1.html" target="_blank">订购方式</a>
+                | <a href="http://doc.taohuren.com/cate-2020-1.html" target="_blank">收款账号</a>
+                | <a href="http://doc.taohuren.com/cate-2014-1.html" target="_blank">法律声明</a>
+                | <a href="http://doc.taohuren.com/cate-2013-1.html" target="_blank">联系我们</a>
+            </p><br>
+            <p>快速导航：
+                <a href="http://www.taohuren.com/mingjia/">紫砂壶名家</a> |
+                <a href="http://www.taohuren.com/zishahu/">紫砂商城</a> |
+                <a href="http://news.taohuren.com/">紫砂学堂</a> |
+                <a href="http://baike.taohuren.com/">紫砂百科</a> |
+                 <a href="http://tupian.taohuren.com/"> 紫砂图片</a> |
+                <a href="http://www.taohuren.com/zhicheng/">职称查询</a> |
+                <a href="http://so.taohuren.com/">宜兴紫砂陶</a>
+            </p><br>
+            <p>2015淘壶人实业有限公司版权所有</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="./会员注册-淘壶人_files/online.js.下载"></script>
+
+
+
+
+<div id="thr_online"><div id="thr_service"></div>
+<div id="thr_qrcode"></div>
+<div id="thr_gotop" style="opacity: 0; display: none;"></div></div></body></html>

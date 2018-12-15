@@ -1,0 +1,941 @@
+var user=(function(){
+    var account=null;
+    var iTime=null;
+    function message_msg(msg) {
+        ds.dialog({
+            title:'消息提示',
+            content:msg,
+            timeout:3
+        });
+    }
+    function confirm_msg (msg, id) {
+        ds.dialog({
+            title:'消息提示',
+            content:msg,
+            yesText:'确定',
+            onyes:function () {
+            $.ajax({
+                type:'post',
+                url:'/user/favoriteAjaxDelete/',
+                data:{id:id},
+                dataType:'json',
+                success:function (result) {
+                if (result.success) {
+                    window.location.href = '/user/collection_list.html';
+                } else {
+                    message_msg(result.message);
+                }
+                }
+            });
+            },
+            noText:'取消',
+            onno:function () {
+            this.close();
+            }
+        });
+    }
+    function RemainTime() {
+        if (iTime == null)iTime = 59;
+        document.getElementById('zPhone').disabled = true;
+        var iSecond, sSecond = "", sTime = "";
+        if (iTime >= 0) {
+            iSecond = parseInt(iTime % 60);
+            if (iSecond >= 0) {
+            sSecond = iSecond + "秒";
+            }
+            sTime = sSecond;
+            if (iTime == 0) {
+            clearTimeout(account);
+            sTime = '获取手机验证码';
+            iTime = 59;
+            document.getElementById('zPhone').disabled = false;
+            } else {
+            account = setTimeout(RemainTime,1000);
+            iTime = iTime - 1;
+            }
+        } else {
+            sTime = '没有倒计时';
+        }
+        document.getElementById('zPhone').value = sTime;
+    }return{
+        RemainTime:function(){RemainTime();},
+        userCheckLogin:function () {//用户登陆
+        $("#msg_username").html("");
+        $("#msg_password").html("");
+        var userName = $("#username").val();
+        var userPassword = $("#password").val();
+        var captcha=$("#captcha").val();
+        var remember = "0";
+
+        if (userName == '') {
+            alert("请输入用户名!");
+            $("#msg_username").html("请输入用户名!");
+            $("#username").focus();
+            return false;
+        }
+        if (userPassword == '') {
+            $("#msg_password").html("请输入密码!");
+            if (userName.length != '') {
+            $("#username").focus();
+            }
+            return false;
+        }
+        if (captcha == '') {
+            $("#captcha").focus();
+            return false;
+        }
+        return true;
+
+    }, userLogin:function () {//用户登陆
+        var flag = true;
+        $("#msg_username").html("");
+        $("#msg_password").html("");
+        $("#msg_code").html("");
+        var userName = $("#username").val();
+        var userPassword = $("#password").val();
+        var code = $("#code").val();
+        var remember = "0";
+        if (document.getElementById("remember").checked) {
+            remember = 1;
+        }
+        if (userName.length == '') {
+            $("#msg_username").html("请输入用户名!");
+            flag = false;
+        }
+        if (userPassword.length == '') {
+            $("#msg_password").html("请输入密码!");
+            flag = false;
+        }
+        if (code.length == '') {
+            $("#msg_code").html("请输入验证码!");
+            flag = false;
+        }
+        if (flag == false) {
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxLogin/',
+            data:{username:userName, password:userPassword, code:code, remember:remember},
+            dataType:'json',
+            cache:false,
+            success:function (data) {
+            if (data == 1) {
+                // window.location.href='/message/login/';
+                $("#msg_login").html("登录成功!");
+                setTimeout(function () {
+                window.location.href = '/user/';
+                }, 3000);
+            } else if (data == 3) {
+                $("#msg_code").html("验证码错误!");
+            } else if (data == 0) {
+                $("#verifyCode").attr("src", "/captcha/?=" + Math.random());
+                $("#msg_login").html("用户名或密码错误,登录失败!");
+            }
+            }
+        });
+    }, userRegister:function () {//会员注册
+        var flag = true;
+        var flag_email = true;
+        $("#msg_username").html("");
+        $("#msg_password").html("");
+        $("#msg_passwordok").html("");
+        $("#msg_telephone").html("");
+        $("#msg_code").html("");
+        $("#msg_register").html("");
+        var userName = $("#username").val();
+        var userPassword = $("#password").val();
+        var userPasswordOk = $("#passwordok").val();
+        var userTelephone = $("#telephone").val();
+        var strCode = $("#code").val();
+        if (userName.length == '') {
+            $("#msg_username").html("请输入用户名!");
+            flag = false;
+        }
+        if (userName.length != '') {
+            var Regx = /^[A-Za-z0-9]*$/;
+            if (!Regx.test(userName)) {
+                $("#msg_username").html("用户名必须有字母和数字组成!");
+                flag = false;
+            }
+            if (userName.length < 3) {
+                $("#msg_username").html("用户名不能少于3个字符!");
+                flag = false;
+            }
+            if (userName.length > 15) {
+                $("#msg_username").html("用户名不能大于15个字符!");
+                flag = false;
+            }
+        }
+        if (userPassword.length == '') {
+            $("#msg_password").html("请输入密码!");
+            flag = false;
+        }
+        if (userPassword.length != "") {
+            if (userPassword.length < 6) {
+                $("#msg_password").html("密码长度不能少于6个字符!");
+                flag = false;
+            }
+        }
+        if (userPasswordOk.length == '') {
+            $("#msg_passwordok").html("请输入确认密码!");
+            flag = false;
+        }
+        if (userPasswordOk.length != '') {
+            if (userPasswordOk != userPassword) {
+                $("#msg_passwordok").html("两次密码输入不一致,请重新输入!");
+                flag = false;
+            }
+        }
+        //注册,手机验证
+        if (userTelephone.length != '') {
+            var mobile = /^((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8}$/;
+            if (!mobile.test(userTelephone)) {
+                $("#msg_telephone").html("请输入有效的电话!");
+                flag = false;
+            }
+        }
+
+        if (strCode.length == '') {
+            $("#msg_code").html("请输入验证码!");
+            flag = false;
+        }
+
+        if (!(document.getElementById("agreement").checked)) {
+            $("#msg_register").html("请阅读用户协议并同意!");
+            flag = false;
+        }
+        if (flag == false) {
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxRegister/',
+            data:{name:userName, password:userPassword, tel:userTelephone, code:strCode},
+            dataType:'json',
+            cache:false,
+            success:function (data) {
+                if (data.success) {
+                    window.location.href = '/user/registerNew/';
+                }else{
+                    switch (data.status){
+                        case '0':$("#msg_register").html("注册失败,请检查注册数据是否有特殊字符!");break;
+                        case '1':break;
+                        case '3': $("#msg_code").html("验证码错误,请重新获取验证码!");break;
+                        case '4':$("#msg_username").html("抱歉,该用户名已被注册!");break;
+                        case '5':$("#msg_email").html("抱歉,该邮箱已被注册!");break;
+                        case '6':$("#msg_telephone").html("抱歉,该手机号码已被注册!");break;
+                        case '7':$("#msg_register").html("注册成功!,<a href='/user/login.html'>去登录</a>");break;
+                    }
+                }
+            }
+        });
+    }, get_register_username:function () {//忘记密码,输入用户名找回密码
+        var flag = true;
+        $("#msg_username").html("");
+        var userName = $("#username").val();
+        if (userName.length == '') {
+            $("#msg_username").html("请输入用户名!");
+            flag = false;
+        }
+        if (userName.length != '') {
+            var Regx = /^[A-Za-z0-9]*$/;
+            if (!Regx.test(userName)) {
+            $("#msg_username").html("用户名必须有字母和数字组成!");
+            flag = false;
+            }
+            if (userName.length < 3) {
+            $("#msg_username").html("用户名不能少于3个字符!");
+            flag = false;
+            }
+            if (userName.length > 15) {
+            $("#msg_username").html("用户名不能大于15个字符!");
+            flag = false;
+            }
+        }
+        if (flag == false) {
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxIsUsernameRegister/',
+            data:{username:userName},
+            dataType:'json',
+            cache:false,
+            success:function (data) {
+            if (data.success) {
+                $("#msg_username").html(data.message);
+            } else{
+                $("#msg_username").html(data.message);
+            }
+            },error:function (msg) {
+            $("#msg_pwd").html("请求发生错误!");
+            flag = false;
+            }
+        });
+        if (flag == false) {
+            return false;
+        }
+    }, get_register_phone:function () {//会员注册,判断手机号码是否已被注册
+        var flag = true;
+        $("#msg_telephone").html("");
+        var userPhone = $("#telephone").val();
+        if (userPhone.length != '') {
+            var mobile = /^(1)+\d{10}$/;
+            if (!mobile.test(userPhone)) {
+            $("#msg_telephone").html("请输入有效的电话!");
+            flag = false;
+            } else {
+            $.ajax({
+                type:'post',
+                url:'/user/ajaxIsPhoneRegister/',
+                data:{mobile:userPhone},
+                dataType:'json',
+                cache:false,
+                success:function (data) {
+                if (data.success) {
+                    flag = true;
+                } else{
+                    $("#msg_telephone").html(data.message);
+                }
+                },
+                error:function (msg) {
+                $("#msg_telephone").html("手机号码验证失败!");
+                flag = false;
+                }
+            });
+            }
+        }
+        return flag;
+    }, get_register_email:function () {//会员注册,判断邮箱是否已被注册--del
+        var flag_email = 1;
+        $("#msg_email").html("");
+        var userEmail = $("#email").val();
+        if (userEmail.length != '') {
+            var myReg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+            if (!myReg.test(userEmail)) {
+            $("#msg_email").html("请输入有效的邮箱!");
+            flag_email = 0;
+            } else {
+            $.ajax({
+                type:'post',
+                url:'/user/ajaxIsEmailRegister/',
+                data:{email:userEmail},
+                dataType:'json',
+                cache:false,
+                beforeSend:function () {
+                },
+                success:function (data) {
+                if (data == 1) {
+                    $("#msg_email").html("抱歉,该邮箱已被注册!");
+                    flag_email = 0;
+                } else if (data == 4) {
+                    $("#msg_email").html("可以注册!");
+                }
+                },
+                error:function (msg) {
+                $("#msg_email").html("验证失败!");
+                flag_email = 0;
+                }
+            });
+            }
+        }
+    }, get_username:function () {//忘记密码,输入用户名找回密码
+        var flag = true;
+        $("#msg_username").html("");
+        var userName = $("#username").val();
+        if (userName.length == '') {
+            $("#msg_username").html("请输入用户名!");
+            flag = false;
+        }
+        if (flag == false) {
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxIsUsernameRegister/',
+            data:{username:userName},
+            dataType:'json',
+            cache:false,
+            success:function (data) {
+            if (data.success) {
+                $("#msg_username").html("该用户不存在!");
+            }
+            },
+            error:function (msg) {}
+        });
+    }, get_pwd:function () {//忘记密码,输入用户名找回密码
+        var flag = true;
+        $("#msg_username").html("");
+        $("#msg_code").html("");
+        var userName = $("#username").val();
+        var code = $("#code").val();
+        if (userName.length == '') {
+            $("#msg_username").html("请输入用户名!");
+            flag = false;
+        }
+        if (code.length == '') {
+            $("#msg_code").html("请输入验证码!");
+            flag = false;
+        }
+        if (flag == false) {
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxGetPwd/',
+            data:{username:userName, code:code},
+            dataType:'json',
+            cache:false,
+            success:function (data) {
+            if (data.success) {
+                window.location.href = '/user/passwordValidate.html?name=' + userName;
+            } else{
+                $("#msg_code").html(data.message);
+            }
+            }
+        });
+    }, sendSms:function () {//发送手机验证码
+        var user_name = $('#uname').val();
+        var mobile = $('#mobile_phone').val();
+        var flag = $('#flag').val();
+        $.post("/user/ajaxSendPhone/", {"mobile":mobile,"user_name":user_name, "flag":flag }, function (result) {
+            if (result.success) {
+            RemainTime();
+            $("#msg_phone").html(result.message);
+            } else {
+             $("#msg_phone").html(result.message);
+            }
+        }, "json");
+    }, getPwdPhone:function () {//手机短信验证,下一步
+        var status = true;
+        $("#msg_phonecode").html("");
+        var uid = $('#uid').val();
+        var mobile = $('#mobile_phone').val();
+        var uname = $('#uname').val();
+        var mobileCode = $('#phonecode').val();
+        if (mobileCode.length == '') {
+            $("#msg_phonecode").html("请填写手机验证码");
+            return false;
+        }
+        $.ajax({
+            type:"POST",
+            url:"/user/ajaxCheckPhone/",
+            data:"mobile_code=" + mobileCode+"&uname="+uname,
+            dataType:"json",
+            async:false,
+            success:function (data) {
+            if (data.success) {
+                window.location.href = '/user/passwordReSet.html?uid=' + uid + "&mobile_code=" + mobileCode;
+            } else {
+                $("#msg_phonecode").html(data.message);
+            }
+            }
+        });
+    }, setNewPwd:function () {//手机短信， 重新设置密码
+        var flag = true;
+        $("#msg_pwd").html("");
+        $("#msg_pwdok").html("");
+        $("#msg_setpwd").html("");
+        var uid = $("#uid").val();
+        var uPwd = $("#pwd").val();
+        var uPwdOk = $("#pwdok").val();
+        var mobile_code = $("#mobile_code").val();
+        if (uPwd.length == '') {
+            $("#msg_pwd").html("请输入新密码!");
+            flag = false;
+        }
+        if (uPwd.length != '') {
+            if (uPwd.length < 6) {
+            $("#msg_pwd").html("密码不能少于6个字符!");
+            flag = false;
+            }
+        }
+        if (uPwdOk.length == '') {
+            $(uPwdOk).html("请输入确认密码!");
+            flag = false;
+        }
+        if (uPwdOk.length != '') {
+            if (uPwdOk != uPwd) {
+            $("#msg_pwdok").html("两次密码输入不一致,请重新输入确认密码!");
+            flag = false;
+            }
+        }
+
+        if (flag == false) {
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxSetPwd/',
+            data:{uid:uid, pwd:uPwd,mobile_code:mobile_code},
+            dataType:'json',
+            cache:false,
+            success:function (data) {
+            if (data.success) {
+                window.location.href = '/user/passwordSet.html';
+            } else {
+                alert(data.message);
+            }
+            }
+        });
+    }, getPwdEmail:function () {//发送邮件验证,下一步
+        var status = true;
+        $("#msg_code").html("");
+        $("#msg_email").html("");
+        var uid = $('#uid').val();
+        var email = $('#email').val();
+        var urlEmail = $('#urlemail').val();
+        var name = $('#uname').val();
+        var code = $('#code').val();
+        if (email.length == '') {
+            $("#msg_email").html("抱歉,你未注册邮箱,请用其他方式找回密码!");
+            return false;
+        }
+        if (code.length == '') {
+            $("#msg_code").html("请输入验证码!");
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxSendEmailPwd/',
+            data:{uid:uid, email:email, name:name, code:code},
+            dataType:'json',
+            cache:false,
+            success:function (data) {
+            if (data.success) {
+                window.location.href = '/user/passwordEmail.html?email=' + urlEmail;
+            } else{
+                $("#msg_code").html(data.message);
+            }
+            }
+        });
+    }, set_newpwdemail:function () {//通过邮件,重新设置密码
+        var flag = true;
+        $("#msg_pwd").html("");
+        $("#msg_pwdok").html("");
+        $("#msg_emailpwd").html("");
+        var uid = $("#uid").val();
+        var uPwd = $("#pwd").val();
+        var uPwdOk = $("#pwdok").val();
+        var code = $("#ecode").val();
+
+        if (code.length == '') {
+            $("#msg_emailpwd").html("邮箱验证码已失效,请重新找回密码!");
+            flag = false;
+        }
+
+        if (uPwd.length == '') {
+            $("#msg_pwd").html("请输入新密码!");
+            flag = false;
+        }
+        if (uPwd.length != '') {
+            if (uPwd.length < 6) {
+            $("#msg_pwd").html("密码不能少于6个字符!");
+            flag = false;
+            }
+        }
+        if (uPwdOk.length == '') {
+            $("#msg_pwdok").html("请输入确认密码!");
+            flag = false;
+        }
+        if (uPwdOk.length != '') {
+            if (uPwdOk != uPwd) {
+            $("#msg_pwdok").html("两次密码输入不一致,请重新输入确认密码!");
+            flag = false;
+            }
+        }
+        if (flag == false) {
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxSetPwdEmail/',
+            data:{uid:uid, pwd:uPwd, code:code},
+            dataType:'json',
+            cache:false,
+            success:function (data) {
+            if (data.success) {
+                window.location.href = '/user/passwordSet.html';
+            } else{
+                $("#msg_emailpwd").html(data.message);
+            }
+            }
+        });
+    }, getPwdWay:function (Names) {//手机，邮箱切换
+        var Name = null;
+        for (var i = 1; i < 3; i++) {
+            var tempName = "selectName_x" + i;
+            var NewsHot = "x" + i;
+            if (Names == tempName) {
+            Name = document.getElementById(NewsHot);
+            Name.style.display = '';
+            } else {
+            Name = document.getElementById(NewsHot);
+            Name.style.display = 'none';
+            }
+        }
+    },
+////////////////////////////////userCommon.js////////////////////////////////
+    addCollect:function (goodsId) {//添加收藏--del
+        $.ajax({
+            type:'post',
+            url:'/user/favoriteAjaxAdd/',
+            data:{id:goodsId},
+            dataType:'json',
+            cache:false,
+            success:function (result) {
+            message_msg(result.message);
+            },
+            error:function (msg) {
+            message_msg("请求发生错误,请稍后再试");
+            }
+        });
+    }, cancelCollectId:function (Id) {//取消收藏
+        $.ajax({
+            type:'post',
+            url:'/user/favoriteAjaxDelete/',
+            data:{id:Id},
+            dataType:'json',
+            cache:false,
+            success:function (result) {
+            if (result.success) {
+                window.location.reload();
+            } else {
+                message_msg(result.message);
+            }
+            },
+            error:function (msg) {}
+        });
+    }, addCart:function (goodsId) {//添加到购物车
+        $.ajax({
+            type:'post',
+            url:'/user/cartAdd/',
+            data:{id:goodsId},
+            dataType:'json',
+            cache:false,
+            success:function (result) {
+            message_msg(result.message);
+            },
+            error:function (msg) {}
+        });
+    }, deleteCart:function (Id) {//购物车删除商品
+        $.ajax({
+            type:'post',
+            url:'/user/cartDelete/',
+            data:{id:Id},
+            dataType:'json',
+            cache:false,
+            success:function (result) {
+            if (result.success) {
+                message_msg(result.message);
+                window.location.href = '/user/cart.html';
+            } else {
+                message_msg(result.message);
+            }
+            },
+            error:function (msg) {}
+        });
+    },cartModifyNum:function(id,t){
+        var num = parseInt($('#goods_number_' + id).val());
+        var num2=(t=='+')?num+1:num- 1;
+        if(t=='+'){
+          var stock = $('#goods_stock_' + id).val();
+          var stockNum = parseInt(stock) - 10000;//实际数量
+          if (num2 > stockNum) {
+              num2 = stockNum;
+              message_msg("该作品库存为" + stockNum);
+              return;
+          }
+        }else{
+          if (num2 < 1) {num2 = 1;return;}
+        }
+        $.ajax({type:'post',url:'/user/cartModifyNum/',dataType:'json',data:{id:id, num:num2,t:t},
+            success:function (result) {
+            if (result.success) {
+                var response=result.response;
+                $('#goods_number_' + id).val(num2);
+                $('#goods_subtotal_' + id).html(response['subtotal']);
+                $('#total_subtotal').html(response['totalAmount']);
+                $('#total_number').html(response['totalNum']);
+            } else {
+                message_msg(result.message);
+            }
+            },
+            error:function (msg) {}
+        });
+    },orderCancel:function (Id) {//判断取消订单
+        $.ajax({
+            type:'post',
+            url:'/user/orderCancel/',
+            data:{id:Id},
+            dataType:'json',
+            cache:false,
+            success:function (result) {
+                if (result.success) {
+                    window.location.reload();
+                } else {
+                    message_msg(result.message);
+                }
+            },
+            error:function (msg) {}
+        });
+    }, edit_profile:function () {//修改个人信息--del
+        var flag = true;
+        $("#msg_phone").html("");
+        $("#msg_email").html("");
+        var phone = $('#phone').val();
+        var email = $('#email').val();
+        if (phone.length == '') {
+            flag = false;
+        }
+        if (email.length == '') {
+            flag = false;
+        }
+    //手机验证
+        if (phone.length != '') {
+            var mobile = /^((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8}$/;
+            if (!mobile.test(phone)) {
+            $("#msg_phone").html("请输入有效的手机号码!");
+            flag = false;
+            }
+        }
+    // 注册,邮箱验证
+        if (email.length != '') {
+            var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+            if (!myreg.test(email)) {
+            $("#msg_email").html("请输入有效的邮箱!");
+            flag = false;
+            }
+        }
+        if (flag == false) {
+            message_msg('修改信息不能为空或格式不正确！');
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/profileAjaxEdit/',
+            data:{phone:phone, email:email},
+            dataType:'json',
+            cache:false,
+            success:function (result) {
+            if (result.success) {
+                message_msg('修改成功！');
+            } else {
+                message_msg(result.message);
+            }
+            },
+            error:function (msg) {
+    //	    message_msg('请求发生错误,请稍后再试！');
+            }
+        });
+    }, edit_password:function () {//修改个人信息
+        var flag = true;
+        $("#msg_old_password").html("");
+        $("#msg_new_password").html("");
+        $("#msg_comfirm_password").html("");
+        var oldPassword = $('#old_password').val();
+        var newPassword = $('#new_password').val();
+        var comPassword = $('#comfirm_password').val();
+        if (oldPassword.length == '') {
+            $("#msg_old_password").html("请输入旧密码!");
+            flag = false;
+        }
+        if (newPassword.length == '') {
+            $("#msg_new_password").html("请输入新密码!");
+            flag = false;
+        }
+        if (comPassword.length == '') {
+            $("#msg_comfirm_password").html("请输入确认密码!");
+            flag = false;
+            return false;
+        }
+        if (newPassword != comPassword) {
+            $("#msg_comfirm_password").html("新密码与确认密码不一致，请重新输入!");
+            flag = false;
+        }
+        if (flag == false) {
+            return false;
+        }
+        $.ajax({type:'post',url:'/user/ajaxEditPassword/',dataType:'json',
+            data:{oldPassword:oldPassword, newPassword:newPassword},
+            success:function (result) {
+            if (result.success) {
+                message_msg(result.message);
+                setTimeout("window.location.href = '/user/login.html'",2000);
+            } else {
+                message_msg(result.message);
+            }
+            },
+            error:function (msg) {}
+        });
+    }, addressCount:function () {//判断收货地址个数，最多5个
+        $.ajax({type:'post',url:'/user/addressAjaxNum/',dataType:'json',
+            data:{},
+            success:function (result) {
+            if (result.success) {
+                window.location.href = '/user/addressAdd.html';
+            } else {
+                $("#msg_addressCount").html(result.message);
+            }
+            }
+        });
+    }, checkConsignee:function () {//收货地址验证
+        var flag = true;
+        $("#msg_consignee").html("");
+        $("#msg_address").html("");
+        $("#msg_tel").html("");
+        var consignee = $('#consignee').val();
+        var address = $('#address').val();
+        var tel = $('#tel').val();
+        if (consignee.length == '') {
+            $("#msg_consignee").html("请输入收货人姓名！");
+            flag = false;
+        }
+        if (address.length == '') {
+            $("#msg_address").html("请输入详细收货地址！");
+            flag = false;
+        }
+        if (tel.length == '') {
+            $("#msg_tel").html("请输入收货人手机号码！");
+            flag = false;
+        }
+        //注册,手机验证
+        if (tel.length != '') {
+            var mobile = /^((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8}$/;
+            if (!mobile.test(tel)) {
+            $("#msg_tel").html("请输入有效的电话!");
+            flag = false;
+            }
+        }
+        if (flag == false) {
+            return false;
+        }
+    }, orderDelete:function (Id) {//删除订单（ajax）--del
+        $.ajax({type:'post',url:'/user/orderDelete/',dataType:'json',
+            data:{id:Id},
+            success:function (result) {
+            window.location.reload();
+            },
+            error:function (msg) {}
+        });
+    }/*, accountDeposit:function () {
+
+        var flag = true;
+        var vName = "#amount";
+        var amount = $(vName).val();
+        flag = user.checkAccount();
+        var msgNote = $('#msg_note');//充值备注
+        var note = $('#user_note');
+        msgNote.html("");
+        var userNote = note.val();
+        if (flag) {
+            //跳转到支付页面
+            var url = "/user/aliPayDeposit/?pay=deposit&amount=" + amount + "&note=" + userNote;
+            window.open(url);
+        }
+    }*/, checkAccount:function () {
+        var flag = true;
+        var msg = $('#msg_price');
+        var vName = "#amount";
+        msg.html("");
+        var amount = $(vName).val();
+        var amountName = $(vName);
+        if (amount == "") {
+            msg.html("请输入充值金额");
+            amountName.focus();
+            flag = false;
+        } else {
+            var re = /^\d+(?=\.{0,1}\d+$|$)/; //正数
+            if (!re.test(amount)) {
+            msg.html("充值金额请输入正整数");
+            amountName.focus();
+            flag = false;
+            } else {
+            if (amount < 0.01) {
+                msg.html("充值金额不能小于0.01元");
+                amountName.focus();
+                flag = false;
+            }
+            }
+        }
+        return flag;
+    }, checkAccounts:function () {
+        var flag = true;
+        var msg = $('#msg_price1');
+        var vName = "#amount1";
+        msg.html("");
+        var amount = $(vName).val();
+        var amountName = $(vName);
+        if (amount == "") {
+            msg.html("请输入金额");
+            amountName.focus();
+            flag = false;
+        } else {
+            var re = /^\d+(?=\.{0,1}\d+$|$)/; //正数
+            if (!re.test(amount)) {
+            msg.html("金额请输入正整数");
+            amountName.focus();
+            flag = false;
+            } else {
+            if (amount < 0.01) {
+                msg.html("金额不能小于0.01元");
+                amountName.focus();
+                flag = false;
+            }
+            }
+        }
+        return flag;
+    }, deleteAccount:function (Id) {//删除账户操作（ajax）--del
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxAccountDelete/',
+            data:{id:Id},
+            dataType:'json',
+            cache:false,
+            success:function (result) {
+            if (result.success) {
+                window.location.reload();
+            } else{
+                message_msg(result.message);
+            }
+            },
+            error:function (msg) {}
+        });
+    }, addAccountLog:function () {//提交提现申请（ajax）
+        var flag = true;
+        var vName = "#amount1";
+        var amount = $(vName).val();
+        flag = user.checkAccounts();
+        var msgNote = $('#msg_note1');//充值备注
+        var note = $('#user_note1');
+        msgNote.html("");
+        var userNote = note.val();
+        if (userNote.length == '') {
+            msgNote.html("请输入备注!");
+            flag = false;
+        }
+        if (!flag) {
+            return false;
+        }
+        $.ajax({
+            type:'post',
+            url:'/user/ajaxAddAccountLog/',
+            data:{amount:amount, note:userNote},
+            dataType:'json',
+            cache:false,
+            success:function (result) {
+            if (result == 1) {
+                $(vName).val("");
+                note.val("");
+                $('#msgApplyResult').html("您的提现申请已成功提交，请等待管理员的审核! <a href='/user/accountLog.html'>查看</a>");
+            } else if (result == 0) {
+                $('#msgApplyResult').html("请求错误，请稍候再试!");
+            }
+            },
+            error:function (msg) {}
+        });
+    }, subPay:function () {
+	    document.getElementById("orderPayForm").submit();
+    }
+};})();
